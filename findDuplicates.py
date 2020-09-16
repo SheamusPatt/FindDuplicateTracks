@@ -77,7 +77,7 @@ def get_tree_list(starting_path, file_type):
 
 def delete_tracks(tracks, delete_the_files=False):
     if delete_the_files:
-        message = f"Deleting {len(tracks)} files"
+        message = "Deleting %d files" % len(tracks)
     else:
         message = "Test mode - skipping delete"
 
@@ -91,7 +91,7 @@ def delete_tracks(tracks, delete_the_files=False):
             unit="files",
         ) as pbar:
             for track in tqdm(tracks):
-                tqdm.write(f"Deleting {track}...", end="")
+                tqdm.write("Deleting %s..." % track, end="")
                 if delete_the_files:
                     track.path.unlink()
                     tqdm.write("Deleted")
@@ -119,12 +119,12 @@ def best_track(first_file=None, second_file=None):
 
 
 def find_tracks_to_delete_at_path(starting_path=".", file_type=["m4a"]):
-    output(f"Examining directory: {starting_path}")
+    output("Examining directory: %s" % starting_path)
 
     tracks_to_keep = defaultdict(lambda: None)
     tracks_to_delete = []
     file_list = get_tree_list(starting_path, file_type)
-    output(f"{len(file_list)} tracks found.", level=2)
+    output("%d tracks found." % len(file_list), level=2)
     with tqdm(
         desc="Finding duplicates",
         total=len(file_list),
@@ -133,7 +133,7 @@ def find_tracks_to_delete_at_path(starting_path=".", file_type=["m4a"]):
     ) as pbar:
         for track in (MusicFile(x) for x in file_list):
             if VERBOSE > 0:
-                tqdm.write(f"Checking: {track.name}")
+                tqdm.write("Checking: %s" % track.name)
             common_name = make_common_name(track)
             tracks_to_keep[common_name], delete_candidate = best_track(
                 tracks_to_keep[common_name], track
@@ -141,7 +141,7 @@ def find_tracks_to_delete_at_path(starting_path=".", file_type=["m4a"]):
             if delete_candidate is not None:
                 tracks_to_delete.append(delete_candidate)
             pbar.update(1)
-    output(f"Done. Found {len(tracks_to_delete)} duplicate tracks")
+    output("Done. Found %d duplicate tracks" % len(tracks_to_delete))
 
     return tracks_to_delete
 

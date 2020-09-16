@@ -59,7 +59,7 @@ def test_delete_tracks(tmpdir):
     delete_list = []
     keep_list = []
     for i in range(0, 6):
-        path = Path(tmpdir / f"test_file{i:03d}.tmp")
+        path = Path(tmpdir / ("test_file%03d.tmp" % i))
         shutil.copy("tests/resources/128bits.m4a", path)
         if i % 2:
             delete_list.append(MusicFile(path))
@@ -114,10 +114,10 @@ def test_main(test_tree):
 
 def test_get_tree_list(tmpdir):
     for p in range(0, 5):
-        d = Path(tmpdir / f"test_dir{p:03d}")
+        d = Path(tmpdir / ("test_dir%:03d" % p) )
         d.mkdir()
         for i in range(0, 20):
-            f = Path(d / f"test_file{i:03d}.tmp")
+            f = Path(d / ("test_file%03d.tmp" % i))
 
             f.touch()
 
